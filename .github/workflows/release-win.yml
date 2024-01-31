@@ -20,6 +20,10 @@ jobs:
       - name: Update NPM
         run: |
           npm install -g npm@latest
+
+      - name: Install dependencies
+        run: |
+          npm install --legacy-peer-deps
       - name: Build and package application
         run: |
           npm run build:win
