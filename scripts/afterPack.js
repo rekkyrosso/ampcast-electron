@@ -6,7 +6,7 @@ exports.default = function (context) {
 
     // VMP sign via EVS
     const {execSync} = require('child_process');
-    console.log('VMP signing start');
-    execSync('python -m castlabs_evs.vmp sign-pkg ./dist/mac ' + context.appOutDir);
-    console.log('VMP signing complete');
+    console.info('VMP signing start');
+    execSync('python -m castlabs_evs.vmp sign-pkg ./dist/mac');
+    console.info('VMP signing complete');
 };

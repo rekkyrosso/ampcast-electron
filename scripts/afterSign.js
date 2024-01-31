@@ -8,7 +8,7 @@ exports.default = function (context) {
         const appDir = context.appOutDir;
 
         // Notarize
-        console.log('Notarizing', {appName, appDir});
+        console.info('Notarizing', {appName, appDir}); // TODO - remove info
         return notarize({
             appBundleId: 'com.rekkyrosso.ampcast',
             appPath: `${appDir}/${appName}.app`,
@@ -19,8 +19,8 @@ exports.default = function (context) {
     } else if (process.platform === 'win32') {
         // VMP sign via EVS
         const {execSync} = require('child_process');
-        console.log('VMP signing start');
+        console.info('VMP signing start');
         execSync('python -m castlabs_evs.vmp sign-pkg ./dist/win-unpacked');
-        console.log('VMP signing complete');
+        console.info('VMP signing complete');
     }
 };
