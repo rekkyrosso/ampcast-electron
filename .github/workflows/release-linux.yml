@@ -6,7 +6,7 @@ jobs:
   release:
     name: Build linux binaries
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 30
 
     env:
       GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -28,7 +28,3 @@ jobs:
       - name: Build and package application (linux)
         run: |
           npm exec electron-builder -- --publish always --linux
-
-      - name: Build and package application (arm64)
-        run: |
-          npm exec electron-builder -- --publish always --arm64

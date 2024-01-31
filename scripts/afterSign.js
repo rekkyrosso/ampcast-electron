@@ -3,12 +3,12 @@ const {notarize} = require('@electron/notarize');
 exports.default = function (context) {
     // Skip if not mac build
     if (process.platform === 'darwin') {
-        console.log('Notarizing');
         // Get context vars
         const appName = context.packager.appInfo.productFilename;
         const appDir = context.appOutDir;
 
         // Notarize
+        console.log('Notarizing', {appName, appDir});
         return notarize({
             appBundleId: 'com.rekkyrosso.ampcast',
             appPath: `${appDir}/${appName}.app`,

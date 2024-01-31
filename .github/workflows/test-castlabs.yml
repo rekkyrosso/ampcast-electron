@@ -6,7 +6,7 @@ jobs:
   test:
     name: Test castlabs integration (windows)
     runs-on: windows-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v3
