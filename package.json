@@ -36,6 +36,8 @@
             "www",
             "node_modules"
         ],
+        "afterPack": "scripts/afterPack.js",
+        "afterSign": "scripts/afterSign.js",
         "electronDownload": {
             "mirror": "https://github.com/castlabs/electron-releases/releases/download/v"
         },
