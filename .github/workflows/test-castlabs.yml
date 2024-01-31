@@ -8,16 +8,17 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 15
 
-    env:
-      CASTLABS_ACCOUNT_NAME: ${{secrets.CASTLABS_ACCOUNT_NAME}}
-      CASTLABS_PASSWORD: ${{secrets.CASTLABS_PASSWORD}}
-
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
 
-      - name: Version
-        run: python --version
-        shell: sh
+      - name: Install castlabs-evs
+        run: python -m pip install --upgrade castlabs-evs
+
+      - name: Test castlabs-evs
+        run: python -m castlabs_evs.account --version
+
+      - name: Authorize
+        run: python -m castlabs_evs.account reauth -A ${{secrets.CASTLABS_ACCOUNT_NAME}} -P ${{secrets.CASTLABS_PASSWORD}}
