@@ -6,7 +6,6 @@ jobs:
   build-windows:
     name: Build Windows binaries
     runs-on: windows-latest
-    environment: production
     timeout-minutes: 90
 
     env:
