@@ -1,0 +1,37 @@
+name: Release windows
+
+on: workflow_dispatch
+
+jobs:
+  build-windows:
+    name: Build Windows binaries
+    runs-on: windows-latest
+    environment: production
+    timeout-minutes: 90
+
+    env:
+      CASTLABS_ACCOUNT_NAME: ${{secrets.CASTLABS_ACCOUNT_NAME}}
+      CASTLABS_PASSWORD: ${{secrets.CASTLABS_PASSWORD}}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+      - name: Update NPM
+        run: |
+          npm install -g npm@latest
+      - name: Build and package application
+        run: |
+          npm run build:win
+        shell: pwsh
+      - name: Upload Windows setup exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: exe
+          path: ./dist/ampcast-*.exe
+      - name: Upload Windows zip file
+        uses: actions/upload-artifact@v3
+        with:
+          name: zip
+          path: ./dist/ampcast-*.zip

@@ -12,9 +12,9 @@ exports.default = function (context) {
         return notarize({
             appBundleId: 'com.rekkyrosso.ampcast',
             appPath: `${appDir}/${appName}.app`,
-            appleId: process.env.appleId,
-            appleIdPassword: process.env.appleIdPassword,
-            teamId: process.env.teamId,
+            appleId: process.env.APPLE_ID,
+            appleIdPassword: process.env.APPLE_ID_PASSWORD,
+            teamId: process.env.APPLE_TEAM_ID,
         });
     } else if (process.platform === 'win32') {
         // VMP sign via EVS
