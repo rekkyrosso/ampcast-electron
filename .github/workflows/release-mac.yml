@@ -1,14 +1,17 @@
-name: Release windows
+name: Release mac
 
 on: workflow_dispatch
 
 jobs:
   release:
-    name: Build windows binaries
-    runs-on: windows-latest
+    name: Build mac binaries
+    runs-on: macos-latest
     timeout-minutes: 90
 
     env:
+      APPLE_ID: ${{secrets.APPLE_ID}}
+      APPLE_ID_PASSWORD: ${{secrets.APPLE_ID_PASSWORD}}
+      APPLE_TEAM_ID: ${{secrets.APPLE_TEAM_ID}}
       CASTLABS_ACCOUNT_NAME: ${{secrets.CASTLABS_ACCOUNT_NAME}}
       CASTLABS_PASSWORD: ${{secrets.CASTLABS_PASSWORD}}
       GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -27,6 +30,6 @@ jobs:
         run: |
           npm install --legacy-peer-deps
 
-      - name: Build and package application (windows)
+      - name: Build and package application (mac)
         run: |
-          npm exec electron-builder -- --publish always --win
+          npm exec electron-builder -- --publish always --mac

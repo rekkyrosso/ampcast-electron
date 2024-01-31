@@ -1,16 +1,14 @@
-name: Release windows
+name: Release linux
 
 on: workflow_dispatch
 
 jobs:
   release:
-    name: Build windows binaries
-    runs-on: windows-latest
+    name: Build linux binaries
+    runs-on: ubuntu-latest
     timeout-minutes: 90
 
     env:
-      CASTLABS_ACCOUNT_NAME: ${{secrets.CASTLABS_ACCOUNT_NAME}}
-      CASTLABS_PASSWORD: ${{secrets.CASTLABS_PASSWORD}}
       GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     steps:
@@ -27,6 +25,10 @@ jobs:
         run: |
           npm install --legacy-peer-deps
 
-      - name: Build and package application (windows)
+      - name: Build and package application (linux)
         run: |
-          npm exec electron-builder -- --publish always --win
+          npm exec electron-builder -- --publish always --linux
+
+      - name: Build and package application (arm64)
+        run: |
+          npm exec electron-builder -- --publish always --arm64
