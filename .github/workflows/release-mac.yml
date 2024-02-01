@@ -12,8 +12,6 @@ jobs:
       APPLE_ID: ${{secrets.APPLE_ID}}
       APPLE_ID_PASSWORD: ${{secrets.APPLE_ID_PASSWORD}}
       APPLE_TEAM_ID: ${{secrets.APPLE_TEAM_ID}}
-      CSC_LINK: ${{secrets.APPLE_CERT_BASE64}}
-      CSC_KEY_PASSWORD: ${{secrets.APPLE_CERT_PASSWORD}}
       GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     steps:
@@ -36,6 +34,6 @@ jobs:
       - name: Authorize castlabs-evs
         run: python -m castlabs_evs.account reauth -A ${{secrets.CASTLABS_ACCOUNT_NAME}} -P ${{secrets.CASTLABS_PASSWORD}}
 
-      - name: Build and package application (mac)
+      - name: Build and package application
         run: |
           npm exec electron-builder -- --publish always --mac

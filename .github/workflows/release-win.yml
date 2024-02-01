@@ -31,6 +31,6 @@ jobs:
       - name: Authorize castlabs-evs
         run: python -m castlabs_evs.account reauth -A ${{secrets.CASTLABS_ACCOUNT_NAME}} -P ${{secrets.CASTLABS_PASSWORD}}
 
-      - name: Build and package application (windows)
+      - name: Build and package application
         run: |
           npm exec electron-builder -- --publish always --win

@@ -1,17 +1,25 @@
-const {notarize} = require('@electron/notarize');
+const {notarize} = require('electron-notarize');
+const {build} = require('../package.json');
 
-exports.default = function (context) {
-    // Skip if not mac build
+exports.default = async function (context) {
     if (process.platform === 'darwin') {
-        // Get context vars
-        const appName = context.packager.appInfo.productFilename;
-        const appDir = context.appOutDir;
-
         // Notarize
-        console.log('Notarizing', {appName, appDir}); // TODO - remove info
+
+        if (!('APPLE_ID' in process.env && 'APPLE_ID_PASSWORD' in process.env)) {
+            console.warn(
+                'Skipping notarizing step. APPLE_ID and APPLE_ID_PASSWORD env variables must be set'
+            );
+            return;
+        }
+
+        console.log('Notarizing...');
+
+        const {appOutDir} = context;
+        const appName = context.packager.appInfo.productFilename;
+
         return notarize({
-            appBundleId: 'com.rekkyrosso.ampcast',
-            appPath: `${appDir}/${appName}.app`,
+            appBundleId: build.appId,
+            appPath: `${appOutDir}/${appName}.app`,
             appleId: process.env.APPLE_ID,
             appleIdPassword: process.env.APPLE_ID_PASSWORD,
             teamId: process.env.APPLE_TEAM_ID,
