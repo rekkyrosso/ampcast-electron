@@ -51,6 +51,7 @@
             },
             "category": "public.app-category.music",
             "icon": "icons/ampcast.png",
+            "type": "distribution",
             "hardenedRuntime": true,
             "entitlements": "assets/entitlements.mac.plist",
             "entitlementsInherit": "assets/entitlements.mac.plist",
