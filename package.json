@@ -30,7 +30,7 @@
         "appId": "org.rekkyrosso.ampcast",
         "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
         "files": [
-            "dist",
+            "src",
             "www",
             "node_modules",
             "package.json"
