@@ -30,6 +30,7 @@
         "appId": "org.rekkyrosso.ampcast",
         "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
         "files": [
+            "dist",
             "src",
             "www",
             "node_modules",
@@ -73,6 +74,9 @@
             ],
             "icon": "assets/icons/ampcast.png",
             "category": "AudioVideo;Audio;Player"
+        },
+        "directories": {
+            "buildResources": "assets"
         },
         "extraResources": [
             "./assets/**"
