@@ -2,8 +2,6 @@ const {notarize} = require('@electron/notarize');
 const {build} = require('../package.json');
 
 exports.default = async function (context) {
-    console.log(`afterSign: appOutDir=${context.appOutDir}`);
-
     if (process.platform === 'darwin') {
         // Notarize
         if (!('APPLE_ID' in process.env && 'APPLE_ID_PASSWORD' in process.env)) {

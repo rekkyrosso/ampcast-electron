@@ -1,6 +1,4 @@
 exports.default = function (context) {
-    console.log(`afterPack: appOutDir=${context.appOutDir}`);
-
     // Skip if not mac
     if (process.platform !== 'darwin') {
         return;
