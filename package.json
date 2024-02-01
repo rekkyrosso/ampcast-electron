@@ -50,7 +50,7 @@
                 ]
             },
             "category": "public.app-category.music",
-            "icon": "icons/ampcast.png",
+            "icon": "assets/icons/ampcast.png",
             "type": "distribution",
             "hardenedRuntime": true,
             "entitlements": "assets/entitlements.mac.plist",
@@ -65,16 +65,19 @@
                 "nsis",
                 "zip"
             ],
-            "icon": "icons/ampcast.ico"
+            "icon": "assets/icons/ampcast.ico"
         },
         "linux": {
             "target": [
                 "AppImage",
                 "tar.xz"
             ],
-            "icon": "icons/ampcast.png",
+            "icon": "assets/icons/ampcast.png",
             "category": "AudioVideo;Audio;Player"
         },
+        "extraResources": [
+            "./assets/**"
+        ],
         "publish": {
             "provider": "github",
             "owner": "rekkyrosso",
