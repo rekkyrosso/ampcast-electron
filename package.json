@@ -29,12 +29,11 @@
         "productName": "ampcast",
         "appId": "org.rekkyrosso.ampcast",
         "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
-        "asar": true,
-        "asarUnpack": "**\\*.{node,dll}",
         "files": [
-            "src",
+            "dist",
             "www",
-            "node_modules"
+            "node_modules",
+            "package.json"
         ],
         "afterPack": "scripts/afterPack.js",
         "afterSign": "scripts/afterSign.js",
