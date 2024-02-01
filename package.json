@@ -16,9 +16,9 @@
         "build:linux": "electron-builder -l"
     },
     "devDependencies": {
+        "@electron/notarize": "^2.2.1",
         "electron": "github:castlabs/electron-releases#v27.2.1+wvcus",
-        "electron-builder": "^24.9.1",
-        "electron-notarize": "^1.2.2"
+        "electron-builder": "^24.9.1"
     },
     "dependencies": {
         "electron-unhandled": "^4.0.1",
@@ -50,7 +50,12 @@
                 ]
             },
             "category": "public.app-category.music",
-            "icon": "icons/ampcast.png"
+            "icon": "icons/ampcast.png",
+            "type": "distribution",
+            "hardenedRuntime": true,
+            "entitlements": "assets/entitlements.mac.plist",
+            "entitlementsInherit": "assets/entitlements.mac.plist",
+            "gatekeeperAssess": false
         },
         "win": {
             "target": [
