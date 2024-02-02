@@ -12,20 +12,31 @@ exports.default = async function (context) {
             return;
         }
 
-        console.log('Notarizing...');
-
+        const {appId} = build;
         const {appOutDir} = context;
         const appName = context.packager.appInfo.productFilename;
+        const appPath = path.join(appOutDir, `${appName}.app`);
 
-        await notarize({
-            appBundleId: build.appId,
-            appPath: `${appOutDir}/${appName}.app`,
-            appleId: env.APPLE_ID,
-            appleIdPassword: env.APPLE_ID_PASSWORD,
-            teamId: env.APPLE_TEAM_ID,
-        });
+        if (!fs.existsSync(appPath)) {
+            throw new Error(`Notarize: Cannot find application at: ${appPath}`);
+        }
 
-        console.log('Notarization complete.');
+        console.log(`Notarizing ${appId} found at ${appPath}`);
+
+        try {
+            await notarize({
+                appBundleId: appId,
+                appPath: appPath,
+                appleId: env.APPLE_ID,
+                appleIdPassword: env.APPLE_ID_PASSWORD,
+                teamId: env.APPLE_TEAM_ID,
+            });
+
+            console.log('Notarization complete.');
+        } catch (err) {
+            console.log('Notarization error.');
+            console.error(err);
+        }
     } else if (process.platform === 'win32') {
         // VMP sign via EVS
         const {execSync} = require('child_process');
