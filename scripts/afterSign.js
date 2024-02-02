@@ -5,9 +5,9 @@ exports.default = async function (context) {
     if (process.platform === 'darwin') {
         const env = process.env;
 
-        if (!('APPLE_ID' in env && 'APPLE_ID_PASSWORD' in env)) {
+        if (!('APPLE_ID' in env && 'APPLE_ID_PASSWORD' in env && 'APPLE_TEAM_ID' in env)) {
             console.warn(
-                'Skipping notarizing step. APPLE_ID and APPLE_ID_PASSWORD env variables must be set'
+                'Skipping notarizing step. APPLE_ID, APPLE_ID_PASSWORD and APPLE_TEAM_ID env variables must be set'
             );
             return;
         }

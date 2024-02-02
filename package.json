@@ -27,7 +27,7 @@
     },
     "build": {
         "productName": "ampcast",
-        "appId": "org.rekkyrosso.ampcast",
+        "appId": "com.rekkyrosso.ampcast",
         "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
         "files": [
             "dist",
