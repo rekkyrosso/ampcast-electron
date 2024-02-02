@@ -8,8 +8,8 @@ exports.default = async function (context) {
         const env = process.env;
 
         if (!('APPLE_ID' in env && 'APPLE_ID_PASSWORD' in env && 'APPLE_TEAM_ID' in env)) {
-            console.warn(
-                'Skipping notarizing step. APPLE_ID, APPLE_ID_PASSWORD and APPLE_TEAM_ID env variables must be set'
+            console.log(
+                '  • Skipping notarizing step. APPLE_ID, APPLE_ID_PASSWORD and APPLE_TEAM_ID env variables must be set'
             );
             return;
         }
@@ -23,7 +23,7 @@ exports.default = async function (context) {
             throw new Error(`Notarize: Cannot find application at: ${appPath}`);
         }
 
-        console.log(`Notarizing ${appId} found at ${appPath}`);
+        console.log(`  • Notarizing ${appId} found at ${appPath}`);
 
         try {
             await notarize({
@@ -34,16 +34,16 @@ exports.default = async function (context) {
                 teamId: env.APPLE_TEAM_ID,
             });
 
-            console.log('Notarization complete.');
+            console.log('  • Notarization complete.');
         } catch (err) {
-            console.log('Notarization error.');
+            console.log('  • Notarization error.');
             console.error(err);
         }
     } else if (process.platform === 'win32') {
         // VMP sign via EVS
         const {execSync} = require('child_process');
-        console.log('VMP signing start');
+        console.log('  • VMP signing start');
         execSync('python -m castlabs_evs.vmp sign-pkg ./dist/win-unpacked');
-        console.log('VMP signing complete');
+        console.log('  • VMP signing complete');
     }
 };
