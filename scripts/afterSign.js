@@ -21,7 +21,8 @@ exports.default = async function (context) {
             appBundleId: build.appId,
             appPath: `${appOutDir}/${appName}.app`,
             appleId: env.APPLE_ID,
-            appleIdPassword: env.APPLE_ID_PASSWORD
+            appleIdPassword: env.APPLE_ID_PASSWORD,
+            teamId: env.APPLE_TEAM_ID,
         });
 
         console.log('Notarization complete.');
