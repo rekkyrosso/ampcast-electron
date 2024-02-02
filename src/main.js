@@ -10,13 +10,14 @@ unhandled();
 function createMainWindow() {
     console.log('createMainWindow');
 
-    const image = nativeImage.createFromPath(__dirname + '/assets/icons/ampcast.ico');
+    const image = nativeImage.createFromPath(
+        __dirname + (app.isPackaged ? '' : '../..') + '/assets/icons/ampcast.ico'
+    );
     image.setTemplateImage(true);
 
     const mainWindowState = windowStateKeeper({
         defaultWidth: 1024,
         defaultHeight: 768,
-
     });
     const {x, y, width, height} = mainWindowState;
 
@@ -36,6 +37,7 @@ function createMainWindow() {
             height: 24,
         },
         webPreferences: {
+            devTools: !app.isPackaged,
             preload: path.join(__dirname, 'preload.js'),
         },
     });
@@ -74,9 +76,9 @@ app.whenReady().then(async () => {
 
     // Synch the window chrome with the app theme.
     ipcMain.handle('setFontSize', (_, fontSize) => {
-        const dragRegionRemSize = 1.5; // defined in web client CSS
-        const height = Math.round(fontSize * dragRegionRemSize);
-        mainWindow.setTitleBarOverlay({height});
+        // const dragRegionRemSize = 1.5; // defined in web client CSS
+        // const height = Math.round(fontSize * dragRegionRemSize);
+        // mainWindow.setTitleBarOverlay({height});
     });
     ipcMain.handle('setFrameColor', (_, color) => {
         mainWindow.setTitleBarOverlay({color});
