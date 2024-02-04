@@ -10,9 +10,7 @@ unhandled();
 function createMainWindow() {
     console.log('createMainWindow');
 
-    const image = nativeImage.createFromPath(
-        __dirname + (app.isPackaged ? '' : '../..') + '/assets/icons/ampcast.ico'
-    );
+    const image = nativeImage.createFromPath(path.join(__dirname, 'icon.png'));
     image.setTemplateImage(true);
 
     const mainWindowState = windowStateKeeper({

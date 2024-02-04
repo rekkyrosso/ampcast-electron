@@ -71,12 +71,16 @@
             "icon": "assets/icons/ampcast.png",
             "category": "AudioVideo;Audio;Player"
         },
+        "nsis": {
+            "oneClick": false,
+            "artifactName": "${productName}-${version}-${os}-${arch}.setup.${ext}",
+            "installerIcon": "assets/icons/setup.ico",
+            "allowToChangeInstallationDirectory": true,
+            "deleteAppDataOnUninstall": true
+        },
         "directories": {
             "buildResources": "assets"
         },
-        "extraResources": [
-            "./assets/**"
-        ],
         "publish": {
             "provider": "github",
             "owner": "rekkyrosso",
