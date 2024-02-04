@@ -1,5 +1,5 @@
 const {app} = require('electron');
-const {components, shell, BrowserWindow, ipcMain, nativeImage} = require('electron');
+const {components, shell, BrowserWindow, ipcMain, nativeImage, Menu} = require('electron');
 const unhandled = require('electron-unhandled');
 const windowStateKeeper = require('electron-window-state');
 const path = require('path');
@@ -7,9 +7,9 @@ require('./server');
 
 unhandled();
 
-function createMainWindow() {
-    console.log('createMainWindow');
+Menu.setApplicationMenu(null);
 
+function createMainWindow() {
     const image = nativeImage.createFromPath(path.join(__dirname, 'icon.png'));
     image.setTemplateImage(true);
 
@@ -56,9 +56,7 @@ const loginUrls = [
 ];
 
 app.whenReady().then(async () => {
-    console.log('app.whenReady');
     await components.whenReady();
-    console.log('components::whenReady', components.status());
 
     const mainWindow = createMainWindow();
 
@@ -89,18 +87,15 @@ app.whenReady().then(async () => {
     });
 
     app.on('activate', () => {
-        console.log('app::activate');
         if (BrowserWindow.getAllWindows().length === 0) {
             createMainWindow();
         }
     });
 
-    console.log('show');
     mainWindow.show();
 });
 
 app.on('window-all-closed', () => {
-    console.log('close');
     if (process.platform !== 'darwin') {
         app.quit();
     }

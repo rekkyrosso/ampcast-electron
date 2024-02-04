@@ -1,5 +1,4 @@
-process.env.DEBUG = 'electron-notarize*';
-const {notarize} = require('@electron/notarize');
+const {notarize} = require('./notarize');
 const fs = require('fs');
 const path = require('path');
 const {build} = require('../package.json');
