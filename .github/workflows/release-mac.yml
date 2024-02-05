@@ -6,14 +6,15 @@ jobs:
   release:
     name: Build mac binaries
     runs-on: macos-latest
-    #timeout-minutes: 90
+    timeout-minutes: 90
 
     env:
       APPLE_ID: ${{secrets.APPLE_ID}}
       APPLE_ID_PASSWORD: ${{secrets.APPLE_ID_PASSWORD}}
       APPLE_TEAM_ID: ${{secrets.APPLE_TEAM_ID}}
-      CSC_LINK: ${{secrets.APPLE_CERT_BASE64}}
-      CSC_KEY_PASSWORD: ${{secrets.APPLE_CERT_PASSWORD}}
+      # Skip signing
+      #CSC_LINK: ${{secrets.APPLE_CERT_BASE64}}
+      #CSC_KEY_PASSWORD: ${{secrets.APPLE_CERT_PASSWORD}}
       GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     steps:
