@@ -6,7 +6,7 @@ jobs:
   release:
     name: Build mac binaries
     runs-on: macos-latest
-    timeout-minutes: 90
+    #timeout-minutes: 90
 
     env:
       APPLE_ID: ${{secrets.APPLE_ID}}
