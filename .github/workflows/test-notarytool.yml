@@ -1,21 +1,12 @@
-name: notarytool history
+name: Test mac notarytool
 
 on: workflow_dispatch
 
 jobs:
   test:
-    name: Test mac notarytool
+    name: Run mac notarytool
     runs-on: macos-latest
-    timeout-minutes: 90
-
-    env:
-      DEBUG: 'electron-notarize'
-      APPLE_ID: ${{secrets.APPLE_ID}}
-      APPLE_ID_PASSWORD: ${{secrets.APPLE_ID_PASSWORD}}
-      APPLE_TEAM_ID: ${{secrets.APPLE_TEAM_ID}}
-      CSC_LINK: ${{secrets.APPLE_CERT_BASE64}}
-      CSC_KEY_PASSWORD: ${{secrets.APPLE_CERT_PASSWORD}}
-      GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v3

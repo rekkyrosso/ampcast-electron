@@ -9,6 +9,22 @@ unhandled();
 
 Menu.setApplicationMenu(null);
 
+let mainWindow;
+
+function createSplashScreen() {
+    const splash = new BrowserWindow({
+        width: 512,
+        height: 512,
+        transparent: true,
+        frame: false,
+        alwaysOnTop: true,
+    });
+    splash.loadFile(path.join(__dirname, 'splash.html'));
+    splash.center();
+    splash.show();
+    return splash;
+}
+
 function createMainWindow() {
     const image = nativeImage.createFromPath(path.join(__dirname, 'icon.png'));
     image.setTemplateImage(true);
@@ -19,7 +35,7 @@ function createMainWindow() {
     });
     const {x, y, width, height} = mainWindowState;
 
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         show: false,
         x,
         y,
@@ -40,11 +56,19 @@ function createMainWindow() {
         },
     });
 
+    // Open external links in the default browser.
+    // Ignore links from login buttons.
+    mainWindow.webContents.setWindowOpenHandler(({url}) => {
+        if (loginUrls.every((loginUrl) => !url.startsWith(loginUrl))) {
+            shell.openExternal(url);
+            return {action: 'deny'};
+        }
+        return {action: 'allow'};
+    });
+
     mainWindowState.manage(mainWindow);
 
     mainWindow.loadURL('http://localhost:8000/');
-
-    return mainWindow;
 }
 
 const loginUrls = [
@@ -56,31 +80,23 @@ const loginUrls = [
 ];
 
 app.whenReady().then(async () => {
+    const splash = createSplashScreen();
+
     await components.whenReady();
 
-    const mainWindow = createMainWindow();
-
-    // Open external links in the default browser.
-    // Ignore links from login buttons.
-    mainWindow.webContents.setWindowOpenHandler(({url}) => {
-        if (loginUrls.every((loginUrl) => !url.startsWith(loginUrl))) {
-            shell.openExternal(url);
-            return {action: 'deny'};
-        }
-        return {action: 'allow'};
-    });
+    createMainWindow();
 
     // Synch the window chrome with the app theme.
     ipcMain.handle('setFontSize', (_, fontSize) => {
         // const dragRegionRemSize = 1.5; // defined in web client CSS
         // const height = Math.round(fontSize * dragRegionRemSize);
-        // mainWindow.setTitleBarOverlay({height});
+        // mainWindow?.setTitleBarOverlay({height});
     });
     ipcMain.handle('setFrameColor', (_, color) => {
-        mainWindow.setTitleBarOverlay({color});
+        mainWindow?.setTitleBarOverlay({color});
     });
     ipcMain.handle('setFrameTextColor', (_, symbolColor) => {
-        mainWindow.setTitleBarOverlay({symbolColor});
+        mainWindow?.setTitleBarOverlay({symbolColor});
     });
     ipcMain.handle('setTheme', () => {
         // ignore for now
@@ -88,11 +104,15 @@ app.whenReady().then(async () => {
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-            createMainWindow();
+            if (!mainWindow) {
+                createMainWindow();
+                mainWindow.show();
+            }
         }
     });
 
     mainWindow.show();
+    splash.close();
 });
 
 app.on('window-all-closed', () => {
