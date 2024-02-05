@@ -14,12 +14,6 @@ exports.default = async function (context) {
             return;
         }
 
-        console.log(
-            env.APPLE_ID.slice(0, 1),
-            env.APPLE_ID_PASSWORD.slice(0, 1),
-            env.APPLE_TEAM_ID.slice(0, 1)
-        );
-
         const {appId} = build;
         const {appOutDir} = context;
         const appName = context.packager.appInfo.productFilename;
