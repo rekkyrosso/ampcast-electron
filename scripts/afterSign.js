@@ -7,12 +7,18 @@ exports.default = async function (context) {
     if (process.platform === 'darwin') {
         const env = process.env;
 
-        if (!('APPLE_ID' in env && 'APPLE_ID_PASSWORD' in env && 'APPLE_TEAM_ID' in env)) {
+        if (!(env.APPLE_ID && env.APPLE_ID_PASSWORD && env.APPLE_TEAM_ID)) {
             console.log(
                 '  • Skipping notarizing step. APPLE_ID, APPLE_ID_PASSWORD and APPLE_TEAM_ID env variables must be set'
             );
             return;
         }
+
+        console.log(
+            env.APPLE_ID.slice(0, 1),
+            env.APPLE_ID_PASSWORD.slice(0, 1),
+            env.APPLE_TEAM_ID.slice(0, 1)
+        );
 
         const {appId} = build;
         const {appOutDir} = context;
