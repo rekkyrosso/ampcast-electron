@@ -1,10 +1,10 @@
-name: Test mac
+name: Release mac
 
 on: workflow_dispatch
 
 jobs:
   release:
-    name: Test mac build
+    name: Build mac binaries
     runs-on: macos-latest
     timeout-minutes: 90
 
