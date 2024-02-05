@@ -31,7 +31,7 @@ exports.default = async function (context) {
                 appPath: appPath,
                 appleId: env.APPLE_ID,
                 appleIdPassword: env.APPLE_ID_PASSWORD,
-                teamId: env.APPLE_TEAM_ID,
+                // teamId: env.APPLE_TEAM_ID,
             });
 
             console.log('  • Notarization complete.');
