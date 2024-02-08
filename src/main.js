@@ -1,13 +1,22 @@
-const {app} = require('electron');
-const {components, shell, BrowserWindow, ipcMain, nativeImage, Menu} = require('electron');
+const {app, components, ipcMain, shell, BrowserWindow, Menu, nativeImage} = require('electron');
 const unhandled = require('electron-unhandled');
 const windowStateKeeper = require('electron-window-state');
 const path = require('path');
-require('./server');
+const server = require('./server');
+const store = require('./store');
 
 unhandled();
 
-Menu.setApplicationMenu(null);
+if (!app.requestSingleInstanceLock()) {
+    // Prevent multiple instances of the app
+    app.quit();
+}
+
+if (app.isPackaged) {
+    // Only create a menu in development.
+    // The menu is not visible but provides keyboard access to the developer tools.
+    Menu.setApplicationMenu(null);
+}
 
 let mainWindow;
 
@@ -25,7 +34,7 @@ function createSplashScreen() {
     return splash;
 }
 
-function createMainWindow() {
+function createMainWindow(url) {
     const image = nativeImage.createFromPath(path.join(__dirname, 'icon.png'));
     image.setTemplateImage(true);
 
@@ -44,6 +53,7 @@ function createMainWindow() {
         minWidth: 800,
         minHeight: 600,
         icon: image,
+        backgroundColor: '#32312f',
         titleBarStyle: 'hidden',
         titleBarOverlay: {
             color: 'rgba(0,0,0,0)',
@@ -68,7 +78,7 @@ function createMainWindow() {
 
     mainWindowState.manage(mainWindow);
 
-    mainWindow.loadURL('http://localhost:8000/');
+    mainWindow.loadURL(url);
 }
 
 const loginUrls = [
@@ -81,38 +91,60 @@ const loginUrls = [
 
 app.whenReady().then(async () => {
     const splash = createSplashScreen();
+    try {
+        let [port] = await Promise.all([server.start(), components.whenReady()]);
+        let url = `http://localhost:${port}/`;
 
-    await components.whenReady();
+        createMainWindow(url);
 
-    createMainWindow();
+        ipcMain.handle('quit', () => app.quit());
 
-    // Synch the window chrome with the app theme.
-    ipcMain.handle('setFontSize', (_, fontSize) => {
-        // const dragRegionRemSize = 1.5; // defined in web client CSS
-        // const height = Math.round(fontSize * dragRegionRemSize);
-        // mainWindow?.setTitleBarOverlay({height});
-    });
-    ipcMain.handle('setFrameColor', (_, color) => {
-        mainWindow?.setTitleBarOverlay({color});
-    });
-    ipcMain.handle('setFrameTextColor', (_, symbolColor) => {
-        mainWindow?.setTitleBarOverlay({symbolColor});
-    });
-    ipcMain.handle('setTheme', () => {
-        // ignore for now
-    });
+        // Synch the window chrome with the app theme.
+        ipcMain.handle('setFrameColor', (_, color) => {
+            mainWindow.setTitleBarOverlay({color});
+        });
+        ipcMain.handle('setFrameTextColor', (_, symbolColor) => {
+            mainWindow.setTitleBarOverlay({symbolColor});
+        });
+        ipcMain.handle('setFontSize', () => {
+            // ignore for now
+        });
+        ipcMain.handle('setTheme', () => {
+            // ignore for now
+        });
 
-    app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) {
-            if (!mainWindow) {
-                createMainWindow();
-                mainWindow.show();
+        // Switch port
+        ipcMain.handle('setPort', async (_, newPort) => {
+            parsedPort = parseInt(newPort, 10);
+            if (parsedPort) {
+                store.port = parsedPort; // possibly confirmation of change of port from the ui
+                if (port !== parsedPort) {
+                    await server.stop();
+                    port = await server.start();
+                    url = `http://localhost:${port}/`;
+                    mainWindow.loadURL(url);
+                }
+            } else {
+                console.error(TypeError(`Invalid port: '${newPort}'`));
             }
-        }
-    });
+        });
 
-    mainWindow.show();
-    splash.close();
+        // For mac apparently.
+        app.on('activate', () => {
+            if (BrowserWindow.getAllWindows().length === 0) {
+                if (!mainWindow) {
+                    createMainWindow(url);
+                    mainWindow.show();
+                }
+            }
+        });
+
+        mainWindow.show();
+        splash.close();
+    } catch (err) {
+        splash.destroy();
+        throw err;
+    }
 });
 
 app.on('window-all-closed', () => {
@@ -120,12 +152,6 @@ app.on('window-all-closed', () => {
         app.quit();
     }
 });
-
-// Prevent multiple instances of the app
-
-if (!app.requestSingleInstanceLock()) {
-    app.quit();
-}
 
 app.on('second-instance', () => {
     if (mainWindow) {
