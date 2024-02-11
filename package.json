@@ -22,6 +22,7 @@
         "electron-builder": "^24.9.1"
     },
     "dependencies": {
+        "electron-context-menu": "^3.6.1",
         "electron-store": "^8.1.0",
         "electron-unhandled": "^4.0.1",
         "electron-window-state": "^5.0.3",
